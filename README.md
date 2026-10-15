@@ -5,6 +5,7 @@ Phone-friendly site for Alex. Tabs:
 - **Tek** (`tek.html`) — Tesla / SpaceX events and livestream links
 - **Bob** (`bob.html`) — Taunton grocery deals
 - **Joe** (`joe.html`) — stock and valuation notes
+- **Cap** (`cap.html`) — Grok Build site testing updates
 
 Live site: https://alexanderread2.github.io/alex-hub/
 

@@ -89,3 +89,14 @@ body.page-joe a { color: #f0d878; }
 }
 
 .bell { font-style: normal; margin-left: 0.25rem; }
+
+.tabs a.cap { color: #4fd4e8; border-color: #1a4a52; }
+.tabs a.active.cap {
+  color: #041418;
+  background: #4fd4e8;
+  border-color: #4fd4e8;
+}
+body.page-cap h1 { color: #4fd4e8; }
+body.page-cap .event.soon, body.page-cap .card.highlight { border-color: #4fd4e8; }
+body.page-cap .when { color: #9ae8f2; }
+body.page-cap a { color: #9ae8f2; }
