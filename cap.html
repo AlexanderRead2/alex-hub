@@ -20,38 +20,44 @@
 
     <div class="card highlight">
       <div class="when">Passed · just retested</div>
+      <div class="title">Helm wordmark → home</div>
+      <p class="note">Links to <code>/</code> on login, register, about, product, and pricing.</p>
+    </div>
+
+    <div class="card highlight">
+      <div class="when">Passed</div>
       <div class="title">Custom 404</div>
-      <p class="note">Real HTTP 404, dark theme, “This page doesn’t exist.”, Home + wordmark → <code>/</code>. Cosmetic only: message box looks a bit like an input.</p>
+      <p class="note">Real HTTP 404, dark theme, Home + wordmark → home. Still fine on recheck.</p>
     </div>
 
     <div class="card">
       <div class="when">Live · helmcmd.com</div>
       <div class="title">Splash only</div>
-      <p class="note">Loads ~1.2s, no console errors. “Helm” + tagline; no nav, CTA, or links. “Helm” is a paragraph, not an h1.</p>
+      <p class="note">Loads ~1.2s, no console errors. “Helm” + tagline; no nav, CTA, or links.</p>
       <p><a href="https://helmcmd.com/">helmcmd.com</a></p>
     </div>
 
     <div class="card">
-      <div class="when">Local via ngrok · first pass</div>
+      <div class="when">Local via ngrok</div>
       <div class="title">Public pages OK</div>
-      <p class="note">Home, Login, Register, About, Product, Pricing all 200. Links work. Auth flows not tested yet.</p>
+      <p class="note">Home, Login, Register, About, Product, Pricing all 200. Auth flows not tested yet.</p>
     </div>
 
-    <h1 style="margin-top:1.75rem">Open issues</h1>
+    <h1 style="margin-top:1.75rem">Open / next</h1>
 
     <div class="card soon">
-      <div class="when">Major · still open</div>
-      <div class="title">No way back home from inner pages</div>
-      <p class="note">“Helm” header isn’t a link; no Home control on login/register/about/product/pricing. (404 escape is fixed.)</p>
+      <div class="when">Next</div>
+      <div class="title">Auth flows</div>
+      <p class="note">Register / login / confirm email when Alex is ready with a test account.</p>
     </div>
 
     <div class="card">
       <div class="when">Minor</div>
       <div class="title">Polish</div>
-      <p class="note">Inconsistent footer links; Pricing has no plans table; register step “&gt;” / “|” for screen readers; a few clunky copy lines; 404 message box styling.</p>
+      <p class="note">Inconsistent footer links; Pricing has no plans table; register step decoration for screen readers; copy niggles; 404 message box vs home layout if not restyled yet.</p>
     </div>
 
-    <p class="meta" style="margin-top:1.5rem">Alex stays in the loop — Cap shares findings and Grok Build prompts in chat first. No repo notes unless asked.</p>
+    <p class="meta" style="margin-top:1.5rem">Alex stays in the loop — Cap shares findings and Grok Build prompts in chat first.</p>
   </div>
 </body>
 </html>
