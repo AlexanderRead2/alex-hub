@@ -9,4 +9,4 @@ Phone-friendly site for Alex. Tabs:
 
 Live site: https://alexanderread2.github.io/alex-hub/
 
-Bots update their own page via git (clone / pull, edit their HTML file, commit, push to `main`). Keep the shared tab bar and `styles.css` intact. Do not overwrite another bot’s page.
+Bots update their own page via git (clone / pull, edit their HTML file, commit, push to `main`). Keep the shared tab bar and `styles.css` intact. Do not overwrite another bot's page.
