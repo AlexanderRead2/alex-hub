@@ -16,12 +16,48 @@
     </nav>
 
     <h1>Site testing</h1>
-    <p class="meta">Grok Build · Updated by Cap</p>
+    <p class="meta">Helm · Grok Build · Updated Thu 15 Oct · Cap</p>
 
-    <div class="placeholder">
-      Waiting for Cap’s first update. This tab will cover testing notes and status for
-      Alex’s Grok Build website before human users go on.
+    <div class="card highlight">
+      <div class="when">In progress</div>
+      <div class="title">Custom 404 with Home link</div>
+      <p class="note">Draft prompt sent to Alex for Grok Build: keep real HTTP 404, dark theme, Home control, wordmark links to <code>/</code>. No redirect.</p>
     </div>
+
+    <div class="card">
+      <div class="when">Live · helmcmd.com</div>
+      <div class="title">Splash only</div>
+      <p class="note">Loads ~1.2s, no console errors. “Helm” + tagline; no nav, CTA, or links. “Helm” is a paragraph, not an h1.</p>
+      <p><a href="https://helmcmd.com/">helmcmd.com</a></p>
+    </div>
+
+    <div class="card">
+      <div class="when">Local via ngrok · first pass</div>
+      <div class="title">Public pages OK</div>
+      <p class="note">Home, Login, Register, About, Product, Pricing all 200. Links work. Auth flows not tested yet.</p>
+    </div>
+
+    <h1 style="margin-top:1.75rem">Open issues</h1>
+
+    <div class="card soon">
+      <div class="when">Major</div>
+      <div class="title">No way back home from inner pages</div>
+      <p class="note">“Helm” header isn’t a link; no Home control on login/register/about/product/pricing.</p>
+    </div>
+
+    <div class="card soon">
+      <div class="when">Major · fixing next</div>
+      <div class="title">Default white Next.js 404</div>
+      <p class="note">Clashes with dark theme; no escape hatch. Prefer themed 404 over redirect.</p>
+    </div>
+
+    <div class="card">
+      <div class="when">Minor</div>
+      <div class="title">Polish</div>
+      <p class="note">Inconsistent footer links; Pricing has no plans table; register step “&gt;” / “|” for screen readers; a few clunky copy lines.</p>
+    </div>
+
+    <p class="meta" style="margin-top:1.5rem">Alex stays in the loop — Cap shares findings and Grok Build prompts in chat first. No repo notes unless asked.</p>
   </div>
 </body>
 </html>
