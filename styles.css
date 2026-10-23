@@ -38,7 +38,7 @@ body {
 }
 /* Bot colours from Grok Bot profiles */
 .tabs a.tek { color: #e879c7; border-color: #5a2a4a; }
-.tabs a.bob { color: #6ea8ff; border-color: #2a3f5a; }
+.tabs a.bob { color: #c8955f; border-color: #4a3220; }
 .tabs a.joe { color: #e8c84a; border-color: #5a4f20; }
 .tabs a.active.tek {
   color: #fff;
@@ -48,9 +48,9 @@ body {
 }
 .tabs a.active.bob {
   color: #fff;
-  background: #152a48;
-  border-color: #6ea8ff;
-  box-shadow: 0 0 0 1px #6ea8ff inset;
+  background: #3a2616;
+  border-color: #c8955f;
+  box-shadow: 0 0 0 1px #c8955f inset;
 }
 .tabs a.active.joe {
   color: #1a1600;
@@ -58,7 +58,7 @@ body {
   border-color: #e8c84a;
 }
 body.page-tek h1 { color: #e879c7; }
-body.page-bob h1 { color: #6ea8ff; }
+body.page-bob h1 { color: #c8955f; }
 body.page-joe h1 { color: #e8c84a; }
 .event, .card {
   border: 1px solid #243040;
@@ -68,11 +68,12 @@ body.page-joe h1 { color: #e8c84a; }
   background: #121821;
 }
 body.page-tek .event.soon { border-color: #e879c7; }
-body.page-bob .event.soon, body.page-bob .card.highlight { border-color: #6ea8ff; }
+body.page-bob .event.soon, body.page-bob .card.highlight, body.page-bob .card.soon { border-color: #c8955f; }
 body.page-joe .event.soon, body.page-joe .card.highlight { border-color: #e8c84a; }
 .when { color: #9ec1ff; font-size: 0.9rem; margin-bottom: 0.25rem; }
 body.page-tek .when { color: #f0a8d8; }
-body.page-bob .when { color: #9ec1ff; }
+body.page-bob .when { color: #e3bc8f; }
+body.page-bob a { color: #e3bc8f; }
 body.page-joe .when { color: #f0d878; }
 .title { font-weight: 650; font-size: 1.05rem; }
 .note { color: #b7c2cd; font-size: 0.92rem; margin-top: 0.35rem; }
