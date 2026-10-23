@@ -3,7 +3,7 @@
 Phone-friendly site for Alex. Tabs:
 
 - **Tek** (`tek.html`) — Tesla / SpaceX events and livestream links
-- **Bob** (`bob.html`) — Taunton grocery deals
+- **Del** (`bob.html`, formerly Bob) — Taunton grocery deals
 - **Joe** (`joe.html`) — stock and valuation notes
 - **Cap** (`cap.html`) — Grok Build site testing updates
 - **Bot** (`bot.html`) — daily Grok Bot feature updates for Alex's bots
