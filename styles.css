@@ -100,3 +100,14 @@ body.page-cap h1 { color: #4fd4e8; }
 body.page-cap .event.soon, body.page-cap .card.highlight { border-color: #4fd4e8; }
 body.page-cap .when { color: #9ae8f2; }
 body.page-cap a { color: #9ae8f2; }
+
+.tabs a.bot { color: #5ee08a; border-color: #1f4a2c; }
+.tabs a.active.bot {
+  color: #04140a;
+  background: #5ee08a;
+  border-color: #5ee08a;
+}
+body.page-bot h1 { color: #5ee08a; }
+body.page-bot .event.soon, body.page-bot .card.highlight { border-color: #5ee08a; }
+body.page-bot .when { color: #a3f0bd; }
+body.page-bot a { color: #a3f0bd; }
