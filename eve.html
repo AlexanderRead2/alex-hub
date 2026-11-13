@@ -143,12 +143,12 @@ const data = [
 ["tw_winproxy_disk_usage","Reports Windows proxy disk usage","no","","","Covered by proxy pool endpoints"],
 ["tw_winproxy_settings","Views or sets Windows proxy settings","no","","","Covered by proxy pool endpoints"]
 ];
-const tbody = document.getElementById('rows');
+const tbody = document.getElementById('rows);
 data.forEach((r, i) => {
   const tr = document.createElement('tr);
   const useful = r[4] === 'yes' ? 'yes' : r[4] === 'no' ? 'no' : r[4] === 'decide' ? 'decide' : 'pending';
   const ro = r[3] === 'yes' ? '<span class="ro">R</span>' : (r[3] === 'no' ? '<span class="ro">W</span>' : '—);
-  tr.innerHTML = `<td>${i+1}</td><td class="cmd">${r[0]}</td><td>${r[1]}</td><td>${ro}</td><td class="${useful}">${r[4] || '—'}</td><td class="pending">${r[5] || '—'}</td><td class="notes">${r[6] || ''}</td>`;
+  tr.innerHTML = '<td>' + (i+1) + '</td><td class="cmd">' + r[0] + '</td><td>' + r[1] + '</td><td>' + ro + '</td><td class="' + useful + '">' + (r[4] || '—') + '</td><td class="pending">' + (r[5] || '—') + '</td><td class="notes">' + (r[6] || '') + '</td>';
   tbody.appendChild(tr);
 });
 document.getElementById('ts').textContent = new Date().toISOString().slice(0,16).replace('T',' ');
