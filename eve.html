@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eve — TW Command Tracker</title>
+<title>Eve - TW Command Tracker</title>
 <style>
   :root { --bg: #0d1117; --fg: #c9d1d9; --muted: #8b949e; --border: #30363d; --accent: #58a6ff; --yes: #3fb950; --no: #f85149; --decide: #d29922; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,13 +29,13 @@
 </head>
 <body>
 <h1>TW Command Tracker</h1>
-<p class="sub">BMC Helix Discovery 26.2 on-prem &middot; Appliance Pattern Access &middot; last updated <span id="ts"></span></p>
+<p class="sub">BMC Helix Discovery 26.2 on-prem - Appliance Pattern Access - last updated <span id="ts"></span></p>
 <div class="filters">
-  <button class="active" onclick="filterRows('all')">All</button>
-  <button onclick="filterRows('decide')">Decide</button>
-  <button onclick="filterRows('yes')">Useful</button>
-  <button onclick="filterRows('no')">Ignore</button>
-  <button onclick="filterRows('pending')">Not reviewed</button>
+  <button class="active" onclick="filterRows('all', event)">All</button>
+  <button onclick="filterRows('decide', event)">Decide</button>
+  <button onclick="filterRows('yes', event)">Useful</button>
+  <button onclick="filterRows('no', event)">Ignore</button>
+  <button onclick="filterRows('pending', event)">Not reviewed</button>
 </div>
 <table>
   <thead>
@@ -68,16 +68,16 @@ const data = [
 ["tw_deluser","Deletes a Tideway user account","no","","","No user-management endpoints in the v1.18 REST API"],
 ["tw_deployment","Manages deployment packages and their application","decide","","",""],
 ["tw_device_capture","Captures device configuration snapshots","decide","","",""],
-["tw_disco_control","Core discovery control — start, stop, pause, resume scans","no","","","Covered by /discovery status and /discovery/runs"],
+["tw_disco_control","Core discovery control - start, stop, pause, resume scans","no","","","Covered by /discovery status and /discovery/runs"],
 ["tw_disco_export_platforms","Exports platform definitions used by discovery","decide","","",""],
 ["tw_disco_import_platforms","Imports platform definitions into discovery","decide","","",""],
-["tw_disk_utils","Disk maintenance utilities — check, repair, compact","no","","","OS-level maintenance; no API equivalent"],
-["tw_dr_control","Disaster recovery control — promote, demote, sync","decide","","","No DR API found in v1.18"],
+["tw_disk_utils","Disk maintenance utilities - check, repair, compact","no","","","OS-level maintenance; no API equivalent"],
+["tw_dr_control","Disaster recovery control - promote, demote, sync","decide","","","No DR API found in v1.18"],
 ["tw_dr_discovery","DR-specific discovery operations","decide","","",""],
 ["tw_ds_compact","Compacts the datastore to reclaim space","no","","","Datastore maintenance; no API equivalent"],
 ["tw_ds_generation_control","Controls datastore generation numbering","no","","","Datastore maintenance; no API equivalent"],
 ["tw_ds_progress","Reports datastore operation progress","yes","","","No direct API equivalent"],
-["tw_event_control","Manages the event system — post, list, clear events","no","","","Covered by /events"],
+["tw_event_control","Manages the event system - post, list, clear events","no","","","Covered by /events"],
 ["tw_excluderanges","Manages IP address exclusion ranges for scanning","no","","","Covered by discovery exclude endpoints"],
 ["tw_fips_control","Controls FIPS compliance mode","no","","","OS/security config; no API equivalent"],
 ["tw_fix_interrupted_disk_utils","Repairs disk utilities interrupted mid-run","no","","","OS-level maintenance; no API equivalent"],
@@ -90,11 +90,11 @@ const data = [
 ["tw_list_searches","Lists saved searches on the appliance","no","","","Covered by /admin/builtin_reports and /admin/custom_reports"],
 ["tw_listusers","Lists all Tideway user accounts","no","","","No user-management endpoints in the v1.18 REST API"],
 ["tw_log_performance","Logs performance metrics for diagnostics","decide","","",""],
-["tw_model_wipe","Wipes the data model — destructive","no","","","Dangerous; also no API equivalent"],
+["tw_model_wipe","Wipes the data model - destructive","no","","","Dangerous; also no API equivalent"],
 ["tw_ol9_stig","Applies Oracle Linux 9 STIG hardening profile","no","","","OS hardening; no API equivalent"],
 ["tw_options","Views or sets appliance configuration options","decide","","","Partial overlap with /admin/preferences"],
 ["tw_passwd","Changes a user password","no","","","No user-management endpoints in the v1.18 REST API"],
-["tw_pattern_management","Manages TKU pattern packages — install, list, remove","no","","","Covered by /knowledge"],
+["tw_pattern_management","Manages TKU pattern packages - install, list, remove","no","","","Covered by /knowledge"],
 ["tw_purge_winproxy_logs","Purges Windows proxy log files","no","","","Covered by proxy pool endpoints"],
 ["tw_purge_winproxy_recorddata","Purges Windows proxy recorded data","no","","","Covered by proxy pool endpoints"],
 ["tw_query","Runs queries against the datastore and returns results","no","","","Covered by /data/search"],
@@ -147,15 +147,15 @@ const tbody = document.getElementById('rows);
 data.forEach((r, i) => {
   const tr = document.createElement('tr);
   const useful = r[4] === 'yes' ? 'yes' : r[4] === 'no' ? 'no' : r[4] === 'decide' ? 'decide' : 'pending';
-  const ro = r[3] === 'yes' ? '<span class="ro">R</span>' : (r[3] === 'no' ? '<span class="ro">W</span>' : '—);
-  tr.innerHTML = '<td>' + (i+1) + '</td><td class="cmd">' + r[0] + '</td><td>' + r[1] + '</td><td>' + ro + '</td><td class="' + useful + '">' + (r[4] || '—') + '</td><td class="pending">' + (r[5] || '—') + '</td><td class="notes">' + (r[6] || '') + '</td>';
+  const ro = r[3] === 'yes' ? '<span class="ro">R</span>' : (r[3] === 'no' ? '<span class="ro">W</span>' : '-);
+  tr.innerHTML = '<td>' + (i+1) + '</td><td class="cmd">' + r[0] + '</td><td>' + r[1] + '</td><td>' + ro + '</td><td class="' + useful + '">' + (r[4] || '-') + '</td><td class="pending">' + (r[5] || '-') + '</td><td class="notes">' + (r[6] || '') + '</td>';
   tbody.appendChild(tr);
 });
 document.getElementById('ts').textContent = new Date().toISOString().slice(0,16).replace('T',' ');
-document.getElementById('count').textContent = data.length + ' commands tracked · R = read-only, W = writes state';
-function filterRows(f) {
+document.getElementById('count').textContent = data.length + ' commands tracked - R = read-only, W = writes state';
+function filterRows(f, ev) {
   document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active);
+  ev.target.classList.add('active);
   tbody.querySelectorAll('tr').forEach((tr, i) => {
     const u = data[i][4];
     tr.style.display = (f==='all' || u===f) ? '' : 'none';
