@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alex Hub · Shopping list</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      cursor: pointer;
+    }
+    .item input {
+      margin-top: 0.35rem;
+      width: 1.15rem;
+      height: 1.15rem;
+      accent-color: #c8955f;
+      flex-shrink: 0;
+    }
+    .item.bought .title,
+    .item.bought .note,
+    .item.bought .when {
+      text-decoration: line-through;
+      opacity: 0.65;
+    }
+    .maybe-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #e3bc8f;
+      border: 1px solid #4a3220;
+      border-radius: 6px;
+      padding: 0.05rem 0.4rem;
+      margin-left: 0.35rem;
+      vertical-align: middle;
+    }
+    #clear-bought {
+      background: #121821;
+      color: #e3bc8f;
+      border: 1px solid #4a3220;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 600;
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+    }
+    #clear-bought:hover,
+    #clear-bought:focus {
+      background: #3a2616;
+      color: #fff;
+      border-color: #c8955f;
+    }
+  </style>
+</head>
+<body class="page-bob">
+  <script>
+    // =====================================================================
+    // SHOPPING LIST DATA — edit this array to add or remove items.
+    // Each item: name, note (price / offer), store, maybe (true = optional).
+    // Checkboxes are saved in the browser only (localStorage), not here.
+    // =====================================================================
+    const SHOPPING_LIST = [
+      {
+        name: "Chicago Town Takeaway BBQ Stuffed Crust Meat Feast Large Pizza 640g",
+        note: "£3 (was £5), offer until 29 Nov",
+        store: "Morrisons",
+        maybe: false
+      },
+      {
+        name: "Finish Ultimate Lemon dishwasher tablets, 75-pack",
+        note: "£12 (was £16)",
+        store: "Morrisons",
+        maybe: false
+      },
+      {
+        name: "Finish Dishwasher Cleaner 250ml, Regular or Lemon",
+        note: "£3.75 (was £5.50)",
+        store: "Morrisons",
+        maybe: false
+      },
+      {
+        name: "Finish Rinse Aid 400ml",
+        note: "£4.25 (was £4.75)",
+        store: "Morrisons",
+        maybe: false
+      },
+      {
+        name: "Morrisons Dishwasher Salt 2kg",
+        note: "£2.65",
+        store: "Morrisons",
+        maybe: true
+      }
+    ];
+    const LAST_UPDATED = "Sat 21 Nov 2026";
+  </script>
+
+  <div class="wrap">
+    <nav class="tabs" aria-label="Bots">
+      <a class="tek" href="tek.html">Tek</a>
+      <a class="bob" href="bob.html">Del</a>
+      <a class="list active" href="shopping.html">Shopping</a>
+      <a class="joe" href="joe.html">Joe</a>
+      <a class="cap" href="cap.html">Cap</a>
+      <a class="bot" href="bot.html">Bot</a>
+    </nav>
+
+    <h1>Shopping list</h1>
+    <p class="meta" id="updated">Updated Sat 21 Nov 2026 · Del</p>
+
+    <div id="shopping-items"></div>
+
+    <p class="meta" style="margin-top:1rem">
+      <button type="button" id="clear-bought">Clear bought</button>
+    </p>
+    <p class="meta">Ticking an item marks it bought on this phone or computer only. Clear bought removes the ticks, not the items.</p>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "alex-hub-shopping-bought";
+
+    function itemId(item) {
+      return item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function loadBought() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveBought(ids) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+      } catch (e) {}
+    }
+
+    function render() {
+      const bought = new Set(loadBought());
+      const root = document.getElementById("shopping-items");
+      const updated = document.getElementById("updated");
+      if (updated) updated.textContent = "Updated " + LAST_UPDATED + " · Del";
+      root.replaceChildren();
+
+      SHOPPING_LIST.forEach(function (item) {
+        const id = itemId(item);
+        const isBought = bought.has(id);
+
+        const card = document.createElement("div");
+        card.className = item.maybe ? "card" : "card soon";
+
+        const label = document.createElement("label");
+        label.className = "item" + (isBought ? " bought" : "");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = isBought;
+        checkbox.setAttribute("data-id", id);
+        checkbox.addEventListener("change", function () {
+          const ids = loadBought().filter(function (x) { return x !== id; });
+          if (checkbox.checked) ids.push(id);
+          saveBought(ids);
+          render();
+        });
+
+        const body = document.createElement("span");
+
+        const when = document.createElement("div");
+        when.className = "when";
+        when.textContent = item.store + (item.maybe ? " · maybe" : "");
+
+        const title = document.createElement("div");
+        title.className = "title";
+        title.textContent = item.name;
+        if (item.maybe) {
+          const tag = document.createElement("span");
+          tag.className = "maybe-tag";
+          tag.textContent = "Maybe";
+          title.appendChild(document.createTextNode(" "));
+          title.appendChild(tag);
+        }
+
+        const note = document.createElement("p");
+        note.className = "note";
+        note.textContent = item.note;
+
+        body.appendChild(when);
+        body.appendChild(title);
+        body.appendChild(note);
+        label.appendChild(checkbox);
+        label.appendChild(body);
+        card.appendChild(label);
+        root.appendChild(card);
+      });
+    }
+
+    document.getElementById("clear-bought").addEventListener("click", function () {
+      saveBought([]);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

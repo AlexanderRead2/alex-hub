@@ -15,6 +15,7 @@ body {
 }
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.35rem;
   position: sticky;
   top: 0;
@@ -112,3 +113,11 @@ body.page-bot h1 { color: #5ee08a; }
 body.page-bot .event.soon, body.page-bot .card.highlight { border-color: #5ee08a; }
 body.page-bot .when { color: #a3f0bd; }
 body.page-bot a { color: #a3f0bd; }
+
+.tabs a.list { color: #c8955f; border-color: #4a3220; }
+.tabs a.active.list {
+  color: #fff;
+  background: #3a2616;
+  border-color: #c8955f;
+  box-shadow: 0 0 0 1px #c8955f inset;
+}
