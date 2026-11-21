@@ -22,6 +22,7 @@ jobs:
         run: |
           mkdir -p _site
           cp -r *.html styles.css README.md .nojekyll _site/ 2>/dev/null || true
+          if [ -d img ]; then cp -r img _site/; fi
           ls -la _site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

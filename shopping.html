@@ -19,11 +19,34 @@
       accent-color: #c8955f;
       flex-shrink: 0;
     }
+    .thumb {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .thumb-placeholder {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      background: #1a222c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      flex-shrink: 0;
+    }
     .item.bought .title,
     .item.bought .note,
     .item.bought .when {
       text-decoration: line-through;
       opacity: 0.65;
+    }
+    .item.bought .thumb,
+    .item.bought .thumb-placeholder {
+      opacity: 0.55;
     }
     .maybe-tag {
       display: inline-block;
@@ -58,7 +81,8 @@
   <script>
     // =====================================================================
     // SHOPPING LIST DATA — edit this array to add or remove items.
-    // Each item: name, note (price / offer), store, maybe (true = optional).
+    // Each item: name, note (price / offer), store, maybe (true = optional),
+    // and optional image (local path under img/shopping/).
     // Checkboxes are saved in the browser only (localStorage), not here.
     // =====================================================================
     const SHOPPING_LIST = [
@@ -66,40 +90,74 @@
         name: "Chicago Town Takeaway BBQ Stuffed Crust Meat Feast Large Pizza 640g",
         note: "£3 (was £5), offer until 29 Nov",
         store: "Morrisons",
-        maybe: false
+        maybe: false,
+        image: "img/shopping/meat-feast.jpg"
       },
       {
         name: "Finish Ultimate Lemon dishwasher tablets, 75-pack",
         note: "£12 (was £16)",
         store: "Morrisons",
-        maybe: false
+        maybe: false,
+        image: "img/shopping/finish-ultimate-lemon-tablets.jpg"
       },
       {
         name: "Finish Dishwasher Cleaner 250ml, Regular or Lemon",
         note: "£3.75 (was £5.50)",
         store: "Morrisons",
-        maybe: false
+        maybe: false,
+        image: "img/shopping/finish-dishwasher-cleaner.jpg"
       },
       {
         name: "Finish Rinse Aid 400ml",
         note: "£4.25 (was £4.75)",
         store: "Morrisons",
-        maybe: false
+        maybe: false,
+        image: "img/shopping/finish-rinse-aid.jpg"
       },
       {
         name: "Morrisons Dishwasher Salt 2kg",
         note: "£2.65",
         store: "Morrisons",
-        maybe: true
+        maybe: true,
+        image: "img/shopping/morrisons-dishwasher-salt.jpg"
       },
       {
-        name: "Rice pudding",
-        note: "Running low",
-        store: "",
-        maybe: false
+        name: "Morrisons Savers Creamed Rice Pudding 400g tin",
+        note: "39p",
+        store: "Morrisons",
+        maybe: false,
+        image: "img/shopping/savers-rice-pudding.jpg"
+      },
+      {
+        name: "McCain Naked Oven Chips Straight Cut 1.7kg",
+        note: "£3 (was £3.70), offer until 29 Nov",
+        store: "Morrisons",
+        maybe: false,
+        image: "img/shopping/mccain-naked-oven-chips.jpg"
+      },
+      {
+        name: "Morrisons Seasoned Potato Wedges 750g",
+        note: "£1.20",
+        store: "Morrisons",
+        maybe: false,
+        image: "img/shopping/morrisons-seasoned-potato-wedges.jpg"
+      },
+      {
+        name: "Morrisons Seasoned Curly Fries 600g",
+        note: "£1.85",
+        store: "Morrisons",
+        maybe: false,
+        image: "img/shopping/morrisons-seasoned-curly-fries.jpg"
+      },
+      {
+        name: "Birds Eye 22 Crispy Chicken Dippers 403g",
+        note: "£2.50 (was £5), offer until 29 Nov",
+        store: "Morrisons",
+        maybe: false,
+        image: "img/shopping/birds-eye-chicken-dippers.jpg"
       }
     ];
-    const LAST_UPDATED = "Sat 21 Nov 2026";
+    const LAST_UPDATED = "Sat 21 Nov 2026, about 9:45pm UK";
   </script>
 
   <div class="wrap">
@@ -113,7 +171,7 @@
     </nav>
 
     <h1>Shopping list</h1>
-    <p class="meta" id="updated">Updated Sat 21 Nov 2026 · Del</p>
+    <p class="meta" id="updated">Updated Sat 21 Nov 2026, about 9:45pm UK · Del</p>
 
     <div id="shopping-items"></div>
 
@@ -173,6 +231,21 @@
           render();
         });
 
+        let media;
+        if (item.image) {
+          media = document.createElement("img");
+          media.className = "thumb";
+          media.src = item.image;
+          media.alt = item.name;
+          media.width = 56;
+          media.height = 56;
+        } else {
+          media = document.createElement("span");
+          media.className = "thumb-placeholder";
+          media.setAttribute("aria-hidden", "true");
+          media.textContent = "🛒";
+        }
+
         const body = document.createElement("span");
 
         const when = document.createElement("div");
@@ -201,6 +274,7 @@
         body.appendChild(title);
         body.appendChild(note);
         label.appendChild(checkbox);
+        label.appendChild(media);
         label.appendChild(body);
         card.appendChild(label);
         root.appendChild(card);
