@@ -91,6 +91,12 @@
         note: "£2.65",
         store: "Morrisons",
         maybe: true
+      },
+      {
+        name: "Rice pudding",
+        note: "Running low",
+        store: "",
+        maybe: false
       }
     ];
     const LAST_UPDATED = "Sat 21 Nov 2026";
@@ -171,7 +177,10 @@
 
         const when = document.createElement("div");
         when.className = "when";
-        when.textContent = item.store + (item.maybe ? " · maybe" : "");
+        const bits = [];
+        if (item.store) bits.push(item.store);
+        if (item.maybe) bits.push("maybe");
+        when.textContent = bits.join(" · ");
 
         const title = document.createElement("div");
         title.className = "title";
