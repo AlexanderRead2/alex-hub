@@ -1,0 +1,100 @@
+name: Grok Bot page watcher
+
+# Weekday checks for official Grok Bot page changes. State lives on the
+# watch-state branch so pushes do not redeploy the public GitHub Pages site.
+on:
+  schedule:
+    # About every 3 hours, 07:00-19:00 UK time, weekdays.
+    # Times are UTC (equal to UK time in winter; one hour behind in summer).
+    - cron: "0 7,10,13,16,19 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: grok-bot-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load previous state
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/state"
+          if git ls-remote --exit-code --heads origin watch-state >/dev/null; then
+            git fetch --no-tags --depth 1 origin watch-state
+            if git show origin/watch-state:watch-state.json > "${RUNNER_TEMP}/state/watch-state.json"; then
+              echo "Loaded previous state from the watch-state branch."
+            else
+              echo "{}" > "${RUNNER_TEMP}/state/watch-state.json"
+              echo "watch-state branch has no watch-state.json; starting a baseline."
+            fi
+          else
+            echo "{}" > "${RUNNER_TEMP}/state/watch-state.json"
+            echo "No watch-state branch yet; this run will record a baseline only."
+          fi
+
+      - name: Compare pages
+        env:
+          WEBHOOK_URL: https://api2.cursor.sh/automations/webhook/f6cce558-d34f-5af2-8f3e-40c1df1369f2
+          ROUTINE_WEBHOOK_SECRET: ${{ secrets.ROUTINE_WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/watch-grok-bot-pages.py \
+            --prev "${RUNNER_TEMP}/state/watch-state.json" \
+            --out "${RUNNER_TEMP}/state/watch-state-new.json" \
+            --changed-flag "${RUNNER_TEMP}/state/commit-state"
+
+      - name: Save state
+        if: success()
+        run: |
+          set -euo pipefail
+          if [ ! -f "${RUNNER_TEMP}/state/commit-state" ]; then
+            echo "No state update needed."
+            exit 0
+          fi
+          if [ ! -f "${RUNNER_TEMP}/state/watch-state-new.json" ]; then
+            echo "New state file is missing."
+            exit 1
+          fi
+
+          # Commit only the state files to the watch-state branch. Never push to main.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          TREE_DIR="${RUNNER_TEMP}/state-tree"
+          INDEX_FILE="${RUNNER_TEMP}/state.index"
+          rm -rf "${TREE_DIR}" "${INDEX_FILE}"
+          mkdir -p "${TREE_DIR}"
+          cp "${RUNNER_TEMP}/state/watch-state-new.json" "${TREE_DIR}/watch-state.json"
+          printf '%s\n' \
+            '# watch-state' \
+            '' \
+            'Machine-readable hashes of public Grok Bot pages, used by the' \
+            '`grok-bot-watch` workflow. This branch is not the website.' \
+            > "${TREE_DIR}/README.md"
+
+          reason="Update page-watch state"
+          if [ "$(cat "${RUNNER_TEMP}/state/commit-state")" = "baseline" ]; then
+            reason="Record page-watch baseline"
+          fi
+
+          export GIT_WORK_TREE="${TREE_DIR}"
+          export GIT_INDEX_FILE="${INDEX_FILE}"
+          git add README.md watch-state.json
+          TREE="$(git write-tree)"
+          unset GIT_WORK_TREE GIT_INDEX_FILE
+
+          if git ls-remote --exit-code --heads origin watch-state >/dev/null; then
+            git fetch --no-tags --depth 1 origin watch-state
+            PARENT="$(git rev-parse origin/watch-state)"
+            COMMIT="$(git commit-tree "${TREE}" -p "${PARENT}" -m "${reason}")"
+          else
+            COMMIT="$(git commit-tree "${TREE}" -m "${reason}")"
+          fi
+          git push origin "${COMMIT}:refs/heads/watch-state"
