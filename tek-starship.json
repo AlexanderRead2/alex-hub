@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "updated_at": "2026-11-28T10:12:49Z",
+  "api_version": "2.3.0",
+  "launches": [
+    {
+      "id": "b97ec300-56b8-49b1-9a17-43b06bcae6f1",
+      "name": "Starship | SpaceX HLS LEO Demo",
+      "net": "2027-06-30T00:00:00Z",
+      "window_start": "2027-06-30T00:00:00Z",
+      "window_end": "2027-06-30T00:00:00Z",
+      "status_abbrev": "TBD",
+      "status_name": "To Be Determined"
+    },
+    {
+      "id": "78775018-e720-4a50-a72c-e448a644c7a0",
+      "name": "Starship | Superbird-9",
+      "net": "2028-12-31T00:00:00Z",
+      "window_start": "2028-12-31T00:00:00Z",
+      "window_end": "2028-12-31T00:00:00Z",
+      "status_abbrev": "TBD",
+      "status_name": "To Be Determined"
+    },
+    {
+      "id": "17b75859-1630-481b-9985-6eef21dcc9a8",
+      "name": "Starship | Starlab",
+      "net": "2029-12-31T00:00:00Z",
+      "window_start": "2029-12-31T00:00:00Z",
+      "window_end": "2029-12-31T00:00:00Z",
+      "status_abbrev": "TBD",
+      "status_name": "To Be Determined"
+    }
+  ],
+  "go_soon_sent": []
+}
