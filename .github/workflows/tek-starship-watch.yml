@@ -1,0 +1,88 @@
+name: Tek Starship launch watcher
+
+# Poll Launch Library 2 for Starship launches. State lives on the
+# watch-state branch (tek-starship.json) so pushes do not redeploy the
+# public GitHub Pages site.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: tek-starship-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load previous state
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/state"
+          if git ls-remote --exit-code --heads origin watch-state >/dev/null; then
+            git fetch --no-tags --depth 1 origin watch-state
+            if git cat-file -e origin/watch-state:tek-starship.json 2>/dev/null; then
+              git show origin/watch-state:tek-starship.json > "${RUNNER_TEMP}/state/tek-starship.json"
+              echo "Loaded previous state from the watch-state branch."
+            else
+              echo "{}" > "${RUNNER_TEMP}/state/tek-starship.json"
+              echo "watch-state branch has no tek-starship.json; starting a baseline."
+            fi
+          else
+            echo "{}" > "${RUNNER_TEMP}/state/tek-starship.json"
+            echo "No watch-state branch yet; this run will record a baseline only."
+          fi
+
+      - name: Compare Starship launches
+        env:
+          WEBHOOK_URL: https://api2.cursor.sh/automations/webhook/2931fd8a-9f39-593f-a831-94b072a730cf
+          TEK_LAUNCH_WEBHOOK_SECRET: ${{ secrets.TEK_LAUNCH_WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/tek_starship_watch.py \
+            --prev "${RUNNER_TEMP}/state/tek-starship.json" \
+            --out "${RUNNER_TEMP}/state/tek-starship-new.json" \
+            --changed-flag "${RUNNER_TEMP}/state/commit-state"
+
+      - name: Save state
+        if: always() && hashFiles(format('{0}/state/commit-state', runner.temp)) != ''
+        run: |
+          set -euo pipefail
+          # Push only tek-starship.json to watch-state. Do not check that
+          # branch out in this workspace, never push it to main, and do
+          # not modify other files already on the branch.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          WORK="${RUNNER_TEMP}/state-repo"
+          mkdir -p "${WORK}"
+          if git ls-remote --exit-code --heads origin watch-state >/dev/null; then
+            git fetch --no-tags --depth 1 origin watch-state
+            git worktree add --detach "${WORK}" origin/watch-state
+            git -C "${WORK}" checkout -B watch-state
+          else
+            git worktree add --detach "${WORK}" HEAD
+            git -C "${WORK}" checkout --orphan watch-state
+            git -C "${WORK}" rm -rf --ignore-unmatch .
+          fi
+          cp "${RUNNER_TEMP}/state/tek-starship-new.json" "${WORK}/tek-starship.json"
+          git -C "${WORK}" add tek-starship.json
+          if git -C "${WORK}" diff --cached --quiet; then
+            echo "State file already up to date."
+            exit 0
+          fi
+          reason="Update Starship watch state"
+          if [ "$(cat "${RUNNER_TEMP}/state/commit-state")" = "baseline" ]; then
+            reason="Record Starship watch baseline"
+          fi
+          git -C "${WORK}" commit -m "${reason}"
+          if ! git -C "${WORK}" push origin HEAD:watch-state; then
+            git fetch --no-tags --depth 1 origin watch-state
+            git -C "${WORK}" pull --rebase origin watch-state
+            git -C "${WORK}" push origin HEAD:watch-state
+          fi
